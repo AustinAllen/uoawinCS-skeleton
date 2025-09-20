@@ -12,7 +12,7 @@ function Features() {
         {features.map((f, i) => (
           <div
             key={i}
-            className="bg-white shadow rounded-2xl p-6 text-center hover:shadow-lg transition"
+            className="bg-[#fdd796] rounded-2xl p-6 text-center hover:shadow-lg transition"
           >
             <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
             <p className="text-gray-600">{f.desc}</p>
