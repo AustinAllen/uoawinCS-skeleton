@@ -1,6 +1,6 @@
 import HoverCard from "../components/HoverCard";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUserDietaryPreference, getUserGoal, convertDietToFilters, mapProfileGoalToLongTerm } from "../utils/profileUtils.js";
 
 // Import images
@@ -64,10 +64,12 @@ function Home() {
               placeholder="Tell us what you're looking for..."
               className="flex-1 px-8 py-5 rounded-l-lg text-gray-100 placeholder-gray-400 bg-gray-800 bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#fbb02d] text-xl border-0"
             />
-            <button className="bg-[#fbb02d] hover:bg-[#e09a1a] text-gray-800 px-10 py-5 rounded-r-lg transition duration-300 text-xl font-semibold shadow-lg flex items-center gap-3">
-              <span>Search</span>
-              <img src={carrotIcon} alt="carrot" className="w-6 h-6" />
-            </button>
+            <Link to="/builder">
+              <button className="bg-[#fbb02d] hover:bg-[#e09a1a] text-gray-800 px-10 py-5 rounded-r-lg transition duration-300 text-xl font-semibold shadow-lg flex items-center gap-3">
+                <span>Search</span>
+                <img src={carrotIcon} alt="carrot" className="w-6 h-6" />
+              </button>
+            </Link>
           </div>
         </div>
       </section>
