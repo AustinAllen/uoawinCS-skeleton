@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { sortIngredientsByGoal, applyDietaryFilters } from "../utils/ingredientScoring.js";
 
 const CATEGORIES = ["Carb", "Protein", "Fat", "Fiber"];
 
@@ -52,12 +54,13 @@ const INGREDIENTS = [
 ];
 
 
-const TARGETS = { kcal: { min: 450, max: 750 }, p: 30, f: 25, c: 70 };
-const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
+
 
 
 export default function Builder() {
-  const [tab, setTab] = useState("Base");
+  const location = useLocation();
+  const [tab, setTab] = useState("Carb");
+  
   // 개인 정보 불러오기
   const [heightCm, setHeightCm] = useState(null);
   const [weightKg, setWeightKg] = useState(null);
@@ -73,47 +76,54 @@ export default function Builder() {
       // ignore
     }
   }, []);
-function getPersonalTargets(heightCm, weightKg) {
-  // 기본값
-  let kcalMin = 450, kcalMax = 750, p = 30, f = 25, c = 70;
-  if (heightCm && weightKg) {
-    // 단순 비례식 (예시)
-    const bmi = weightKg / Math.pow(heightCm / 100, 2);
-    // 기초대사량 추정 (Mifflin-St Jeor 공식, 남성 기준)
-    const bmr = 10 * weightKg + 6.25 * heightCm - 5 * 25 + 5; // 25세 기준
-    kcalMin = Math.round(bmr * 1.1 * 0.7); // 활동량/목표에 따라 조정
-    kcalMax = Math.round(bmr * 1.1 * 1.1);
-    // 단백질, 탄수, 지방도 체중에 따라 증가
-    p = Math.round(1.2 * weightKg); // 1.2g/kg
-    f = Math.round(0.8 * weightKg); // 0.8g/kg
-    c = Math.round((kcalMax * 0.5) / 4); // 50% 탄수화물
+
+  // Get data from navigation (includes Profile data)
+  const dailyGoal = location.state?.dailyGoal || 'Balanced';
+  const longTermGoal = location.state?.longTermGoal || 'Focus/Energy';
+  const dietaryFilters = location.state?.dietaryFilters || {};
+  const userDiet = location.state?.userDiet || "";
+
+  // 개인화된 목표 계산 함수
+  function getPersonalTargets(heightCm, weightKg) {
+    // 기본값
+    let kcalMin = 450, kcalMax = 750, p = 30, f = 25, c = 70;
+    if (heightCm && weightKg) {
+      // 단순 비례식 (예시)
+      const bmi = weightKg / Math.pow(heightCm / 100, 2);
+      // 기초대사량 추정 (Mifflin-St Jeor 공식, 남성 기준)
+      const bmr = 10 * weightKg + 6.25 * heightCm - 5 * 25 + 5; // 25세 기준
+      kcalMin = Math.round(bmr * 1.1 * 0.7); // 활동량/목표에 따라 조정
+      kcalMax = Math.round(bmr * 1.1 * 1.1);
+      // 단백질, 탄수, 지방도 체중에 따라 증가
+      p = Math.round(1.2 * weightKg); // 1.2g/kg
+      f = Math.round(0.8 * weightKg); // 0.8g/kg
+      c = Math.round((kcalMax * 0.5) / 4); // 50% 탄수화물
+    }
+    return { kcal: { min: kcalMin, max: kcalMax }, p, f, c };
   }
-  return { kcal: { min: kcalMin, max: kcalMax }, p, f, c };
-}
-const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
+
+  // 개인화된 목표값 사용
+  const TARGETS = useMemo(() => getPersonalTargets(heightCm, weightKg), [heightCm, weightKg]);
+  
+  const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
+
   const [cart, setCart] = useState({});
-  const [filters, setFilters] = useState({
-    vegan: false,
-    dairyFree: false,
-    nutFree: false,
-  });
 
   const baseCount = useMemo(
-    () => Object.values(cart).filter(({ item }) => item.category === "Base").length,
+    () => Object.values(cart).filter(({ item }) => item.category === "Carb").length,
     [cart]
   );
 
   const filtered = useMemo(() => {
-    return INGREDIENTS.filter((i) => {
-      if (i.category !== tab) return false;
-
-      if (filters.vegan && !i.vegan) return false;
-      if (filters.dairyFree && !i.dairyFree) return false;
-      if (filters.nutFree && !i.nutFree) return false;
-
-      return true;
-    });
-  }, [tab, filters]);
+    // Apply dietary filters from Profile first
+    let filteredIngredients = applyDietaryFilters(INGREDIENTS, dietaryFilters);
+    
+    // Then filter by category
+    filteredIngredients = filteredIngredients.filter(i => i.category === tab);
+    
+    // Finally sort by daily goal
+    return sortIngredientsByGoal(filteredIngredients, dailyGoal);
+  }, [tab, dietaryFilters, dailyGoal]);
 
   const totals = useMemo(() => {
     let p = 0, f = 0, c = 0, fiber = 0;
@@ -156,7 +166,6 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
     });
   };
 
-  const TARGETS = useMemo(() => getPersonalTargets(heightCm, weightKg), [heightCm, weightKg]);
   const kcalPos = (() => {
     const { min, max } = TARGETS.kcal;
     const clamped = Math.max(min, Math.min(totals.kcal, max));
@@ -187,23 +196,23 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
                 </button>
               ))}
             </div>
-            {/* Filters */}
-            <div className="flex flex-wrap gap-3 justify-center mb-4">
-              {["vegan", "dairyFree", "nutFree"].map((f) => (
-                <label key={f} className="flex items-center gap-1 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={filters[f]}
-                    onChange={() => setFilters((prev) => ({ ...prev, [f]: !prev[f] }))}
-                  />
-                  {f.replace(/([A-Z])/g, " $1")}
-                </label>
-              ))}
-            </div>
+            
+            {/* Active Dietary Preferences from Profile */}
+            {dietaryFilters && Object.values(dietaryFilters).some(Boolean) && (
+              <div className="flex flex-wrap gap-2 justify-center mb-4">
+                <span className="text-sm text-gray-600">Dietary preferences:</span>
+                {dietaryFilters.vegan && <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Vegan</span>}
+                {dietaryFilters.dairyFree && <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Dairy-free</span>}
+                {dietaryFilters.nutFree && <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Nut-free</span>}
+              </div>
+            )}
             {/* List */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filtered.map((it) => (
-                <li key={it.id} className="flex items-center justify-between gap-3 border rounded-xl px-3 py-2 shadow-sm">
+                <li 
+                  key={it.id} 
+                  className="group relative flex items-center justify-between gap-3 border rounded-xl px-3 py-2 shadow-sm hover:shadow-md transition-all duration-200"
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-yellow-100 grid place-items-center">
                       <img src={it.image} alt={it.name} className="w-6 h-6" />
@@ -213,10 +222,39 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
                       <div className="text-xs text-gray-500">{it.serving}</div>
                     </div>
                   </div>
+                  
+                  {/* Hover details */}
+                  <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-30 pointer-events-none">
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div><strong>Calories:</strong> {it.calories || Math.round(it.p * 4 + it.c * 4 + it.f * 9)}</div>
+                      <div><strong>Protein:</strong> {it.p}g</div>
+                      <div><strong>Carbs:</strong> {it.c}g</div>
+                      <div><strong>Fat:</strong> {it.f}g</div>
+                      {it.fiber > 0 && <div><strong>Fiber:</strong> {it.fiber}g</div>}
+                      {it.goalScore && it.goalScore > 0.01 && <div><strong>Goal Score:</strong> {Math.round(it.goalScore * 100)}%</div>}
+                    </div>
+                    {/* Tags */}
+                    {it.tags && it.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {it.tags.map((tag, idx) => (
+                          <span key={idx} className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Dietary info */}
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {it.vegan && <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Vegan</span>}
+                      {it.dairyFree && <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Dairy-free</span>}
+                      {it.nutFree && <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Nut-free</span>}
+                    </div>
+                  </div>
+                  
                   <button
                     onClick={() => add(it)}
-                    disabled={it.category === "Base" && baseCount >= 1}
-                    className="text-sm px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-40"
+                    disabled={it.category === "Carb" && baseCount >= 1}
+                    className="text-sm px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-40 relative z-20"
                   >
                     + Add
                   </button>
@@ -225,7 +263,7 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
             </ul>
 
             <div className="text-xs text-gray-500 mt-3">
-              Base ingredients added: {baseCount}/1
+              Carb ingredients added: {baseCount}/1 | Showing ingredients optimized for {dailyGoal}
             </div>
           </section>
 
@@ -278,13 +316,12 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
             <div className="grid grid-cols-[60px_1fr] gap-x-3 mt-2">
               <div className="text-4xl">🧮</div>
               <div className="text-sm leading-7">
-                <div>Calories: <b>{totals.kcal}</b> kcal</div>
                 <div>Calories: <b>{totals.kcal}</b> kcal (target {TARGETS.kcal.min}~{TARGETS.kcal.max})</div>
                 <div>Protein: <b>{totals.p}</b> g (target {TARGETS.p}g)</div>
                 <div>Carbs:   <b>{totals.c}</b> g (target {TARGETS.c}g)</div>
                 <div>Fat:     <b>{totals.f}</b> g (target {TARGETS.f}g)</div>
                 {(!heightCm || !weightKg) && (
-                  <div className="text-xs text-red-500 mt-1">Profile에서 키와 몸무게를 입력하면 개인 맞춤 기준이 적용됩니다.</div>
+                  <div className="text-xs text-red-500 mt-1">Enter your height and weight in Profile to get personalized targets.</div>
                 )}
               </div>
             </div>

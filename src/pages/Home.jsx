@@ -1,5 +1,7 @@
 import HoverCard from "../components/HoverCard";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getUserDietaryPreference, getUserGoal, convertDietToFilters, mapProfileGoalToLongTerm } from "../utils/profileUtils.js";
 
 // Import images
 import searchBarBG from "../img/SearchBarBG.jpeg";
@@ -20,6 +22,26 @@ import nutfreeSalad from "../img/NutsFree_Salad.jpg";
 import leanSalad from "../img/WeightControl_Salad.webp";
 
 function Home() {
+  const navigate = useNavigate();
+
+  // Handle card click and navigate to builder with selected goal
+  const handleCardClick = (dailyGoal) => {
+    // Get user profile data
+    const userDiet = getUserDietaryPreference();
+    const userGoal = getUserGoal();
+    const dietaryFilters = convertDietToFilters(userDiet);
+    const longTermGoal = mapProfileGoalToLongTerm(userGoal);
+    
+    navigate('/builder', { 
+      state: { 
+        dailyGoal: dailyGoal,
+        longTermGoal: longTermGoal,
+        dietaryFilters: dietaryFilters,
+        userDiet: userDiet // For display purposes
+      } 
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section with Background Image */}
@@ -69,18 +91,21 @@ function Home() {
               defaultImage={quickImg}
               hoverImage={focusSalad}
               imageScale="large"
+              onClick={() => handleCardClick('Quick')}
             />
             <HoverCard
               title="Budget"
               description="more protein per dollar"
               defaultImage={budgetImg}
               hoverImage={proteinSalad}
+              onClick={() => handleCardClick('Budget')}
             />
             <HoverCard
               title="Hydrating"
               description="cooling, high-water veggies"
               defaultImage={hydratingImg}
               hoverImage={veganSalad}
+              onClick={() => handleCardClick('Hydrating')}
             />
             <HoverCard
               title="Recovery"
@@ -88,12 +113,14 @@ function Home() {
               defaultImage={recoveryImg}
               hoverImage={nutfreeSalad}
               imageScale="small"
+              onClick={() => handleCardClick('Recovery')}
             />
             <HoverCard
               title="Balanced"
               description="all macros in range"
               defaultImage={balancedImg}
               hoverImage={leanSalad}
+              onClick={() => handleCardClick('Balanced')}
             />
           </div>
         </div>

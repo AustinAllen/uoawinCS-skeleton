@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function HoverCard({ title, description, defaultImage, hoverImage, imageScale = "normal" }) {
+function HoverCard({ title, description, defaultImage, hoverImage, imageScale = "normal", onClick }) {
   const [isHovered, setIsHovered] = useState(false);
   
   // Define different scales for different images (only for default icons)
@@ -17,9 +17,10 @@ function HoverCard({ title, description, defaultImage, hoverImage, imageScale = 
 
   return (
     <div 
-      className="bg-[#ffde5a] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-auto min-h-[300px] flex flex-col"
+      className="bg-[#ffde5a] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-auto min-h-[300px] flex flex-col cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
     >
       {(defaultImage || hoverImage) && (
         <div className="h-40 overflow-hidden bg-white flex items-center justify-center p-4">
