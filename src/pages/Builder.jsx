@@ -1,47 +1,56 @@
 import { useState, useMemo } from "react";
 
-const CATEGORIES = ["Base", "Produce", "Protein", "Toppings", "Dressing"];
+const CATEGORIES = ["Carb", "Protein", "Fat", "Fiber"];
 
 const INGREDIENTS = [
-  // Base
-  { id:"base_rice", name:"Rice", category:"Base", serving:"1 cup cooked", unit:"cup", image:"/img/rice.png", p:4, f:0.4, c:45, fiber:0.6 },
-  { id:"base_noodles", name:"Noodles", category:"Base", serving:"1 cup cooked", unit:"cup", image:"/img/noodles.png", p:7, f:2, c:40, fiber:2 },
-  { id:"base_potatoes", name:"Potatoes", category:"Base", serving:"1 medium (150g)", image:"/img/potato.png", p:3, f:0.2, c:26, fiber:2.2 },
-  { id:"base_couscous", name:"Couscous", category:"Base", serving:"1 cup cooked", image:"/img/couscous.png", p:6, f:0.3, c:36, fiber:2.2 },
-  { id:"base_lentils", name:"Lentils", category:"Base", serving:"1/2 cup cooked", image:"/img/lentils.png", p:9, f:0.4, c:20, fiber:8 },
-  { id:"base_beans", name:"Beans", category:"Base", serving:"1/2 cup cooked", image:"/img/beans.png", p:7, f:0.5, c:20, fiber:7 },
-  { id:"base_vermicelli", name:"Vermicelli", category:"Base", serving:"1 cup cooked", image:"/img/vermicelli.png", p:4, f:1, c:42, fiber:1.5 },
-  { id:"base_pasta", name:"Pasta", category:"Base", serving:"1 cup cooked", image:"/img/pasta.png", p:6, f:1.3, c:31, fiber:1.8 },
-  { id:"base_bulgur", name:"Bulgur Wheat", category:"Base", serving:"1 cup cooked", image:"/img/bulgur.png", p:6, f:0.4, c:33, fiber:8.2 },
-  { id:"base_chickpeas", name:"Chickpeas", category:"Base", serving:"1/2 cup cooked", image:"/img/chickpeas.png", p:7, f:2, c:20, fiber:6 },
-  { id:"base_barley", name:"Pearl Barley", category:"Base", serving:"1 cup cooked", image:"/img/barley.png", p:4, f:0.4, c:44, fiber:6 },
-  { id:"base_quinoa", name:"Quinoa", category:"Base", serving:"1 cup cooked", image:"/img/quinoa.png", p:8, f:3.5, c:39, fiber:5 },
+  // --- Carbs (10) ---
+  { id:"carb_rice",        name:"Rice",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_rice.png",        p:4, f:0.4, c:45, fiber:0.6 },
+  { id:"carb_pasta",       name:"Pasta",             category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_pasta.png",       p:6, f:1.3, c:31, fiber:1.8 },
+  { id:"carb_bread",       name:"Whole Wheat Bread", category:"Carb", serving:"2 slices",     image: "/src/img/carb_bread.png",       p:8, f:2,   c:28, fiber:4 },
+  { id:"carb_Quinoa",      name:"Quinoa",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_Quinoa.png",      p:8, f:3.5, c:39, fiber:5 },
+  { id:"carb_potato",      name:"Potato",            category:"Carb", serving:"1 medium",     image: "/src/img/carb_potato.png",      p:3, f:0.2, c:26, fiber:2.2 },
+  { id:"carb_oats",        name:"Oats",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_oats.png",        p:6, f:3,   c:27, fiber:4 },
+  { id:"carb_corn",        name:"Corn",              category:"Carb", serving:"1 cup",        image: "/src/img/carb_corn.png",        p:5, f:2,   c:41, fiber:4.6 },
+  { id:"carb_sweetpotato", name:"Sweet Potato",      category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_SweetPotato.png", p:4, f:0.2, c:41, fiber:6 },
+  { id:"carb_couscous",    name:"Couscous",          category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_couscous.png",    p:6, f:0.3, c:36, fiber:2.2 },
+  { id:"carb_barley",      name:"Barley",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_barley.png",      p:4, f:0.4, c:44, fiber:6 },
+  // --- Protein (10) ---
+  { id:"pro_chicken-breast", name:"Chicken Breast", category:"Protein", serving:"100g cooked", image:"/src/img/pro_chicken-breast.png", p:31, f:3.6, c:0, fiber:0 },
+  { id:"pro_beef", name:"Beef", category:"Protein", serving:"100g cooked", image:"/src/img/pro_beef.png", p:26, f:20, c:0, fiber:0 },
+  { id:"pro_salmon", name:"Salmon", category:"Protein", serving:"100g cooked", image:"/src//img/pro_salmon.png", p:20, f:13, c:0, fiber:0 },
+  { id:"pro_tuna", name:"Tuna (water)", category:"Protein", serving:"100g", image:"/src/img/pro_tuna.png", p:24, f:1, c:0, fiber:0 },
+  { id:"pro_egg", name:"Egg", category:"Protein", serving:"1 large", image:"/src/img/pro_egg.png", p:6, f:5, c:0.6, fiber:0 },
+  { id:"pro_tofu", name:"Tofu", category:"Protein", serving:"100g", image:"/src/img/pro_tofu.png", p:8, f:5, c:2, fiber:1 },
+  { id:"pro_tempeh", name:"Tempeh", category:"Protein", serving:"100g", image:"/src/img/pro_tempeh.png", p:19, f:11, c:9, fiber:5 },
+  { id:"pro_shrimp", name:"Shrimp", category:"Protein", serving:"100g", image:"/src/img/pro_shrimp.png", p:24, f:0.3, c:0, fiber:0 },
+  { id:"pro_greek-yogurt", name:"Greek Yogurt", category:"Protein", serving:"1 cup", image:"/src/img/pro_greek-yogurt.png", p:10, f:0.7, c:6, fiber:0 },
+  { id:"pro_cottage-cheese", name:"Cottage Cheese", category:"Protein", serving:"1 cup", image:"/src/img/pro_cottage-cheese.png", p:25, f:2.3, c:6, fiber:0 },
 
-  // Produce
-  { id:"prod_broccoli", name:"Broccoli", category:"Produce", serving:"1 cup cooked", image:"/img/broccoli.png", p:3.7, f:0.6, c:11, fiber:5.1 },
-  { id:"prod_spinach", name:"Spinach", category:"Produce", serving:"1 cup cooked", image:"/img/spinach.png", p:5, f:0.5, c:7, fiber:4.3 },
-  { id:"prod_corn", name:"Corn", category:"Produce", serving:"1 cup", image:"/img/corn.png", p:5, f:2, c:41, fiber:4.6 },
-  { id:"prod_apple", name:"Apple", category:"Produce", serving:"1 medium", image:"/img/apple.png", p:0.5, f:0.3, c:25, fiber:4.4 },
+  // --- Fat (10) ---
+  { id:"fat_oliveoil", name:"Olive Oil", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_oliveoil.png", p:0, f:14, c:0, fiber:0 },
+  { id:"fat_avocado", name:"Avocado", category:"Fat", serving:"1/2 medium", image:"/src/img/fat_avocado.png", p:2, f:15, c:9, fiber:7 },
+  { id:"fat_almonds", name:"Almonds", category:"Fat", serving:"28g", image:"/src/img/fat_almonds.png", p:6, f:14, c:6, fiber:3.5 },
+  { id:"fat_walnuts", name:"Walnuts", category:"Fat", serving:"28g", image:"/src/img/fat_walnuts.png", p:4, f:18, c:4, fiber:2 },
+  { id:"fat_peanutbutter", name:"Peanut Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_peanutbutter.png", p:4, f:8, c:3, fiber:1 },
+  { id:"fat_cheese", name:"Cheddar Cheese", category:"Fat", serving:"28g", image:"/src/img/fat_cheese.png", p:7, f:9, c:1, fiber:0 },
+  { id:"fat_butter", name:"Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_butter.png", p:0, f:11, c:0, fiber:0 },
+  { id:"fat_chocolate", name:"Dark Chocolate", category:"Fat", serving:"30g", image:"/src/img/fat_chocolate.png", p:2, f:12, c:13, fiber:3 },
+  { id:"fat_coconut", name:"Coconut Meat", category:"Fat", serving:"1 cup", image:"/src/img/fat_coconut.png", p:3, f:27, c:12, fiber:7 },
+  { id:"fat_flaxseed", name:"Flax Seeds", category:"Fat", serving:"2 Tbsp", image:"/src/img/fat_flaxseed.png", p:4, f:8, c:4, fiber:4 },
 
-  // Protein
-  { id:"pro_chicken", name:"Chicken Breast", category:"Protein", serving:"100g cooked", image:"/img/chicken.png", p:31, f:3.6, c:0, fiber:0 },
-  { id:"pro_salmon", name:"Salmon", category:"Protein", serving:"100g cooked", image:"/img/salmon.png", p:20, f:13, c:0, fiber:0 },
-  { id:"pro_tofu", name:"Tofu (firm)", category:"Protein", serving:"100g", image:"/img/tofu.png", p:8, f:5, c:2, fiber:1 },
-  { id:"pro_egg", name:"Egg", category:"Protein", serving:"1 large", image:"/img/egg.png", p:6, f:5, c:0.6, fiber:0 },
-  { id:"pro_tuna", name:"Tuna (water)", category:"Protein", serving:"100g", image:"/img/tuna.png", p:24, f:1, c:0, fiber:0 },
-  { id:"pro_tempeh", name:"Tempeh", category:"Protein", serving:"100g", image:"/img/tempeh.png", p:19, f:11, c:9, fiber:5 },
-
-  // Toppings
-  { id:"top_avocado", name:"Avocado", category:"Toppings", serving:"1/2 medium", image:"/img/avocado.png", p:2, f:15, c:9, fiber:7 },
-  { id:"top_almonds", name:"Almonds", category:"Toppings", serving:"28g", image:"/img/almonds.png", p:6, f:14, c:6, fiber:3.5 },
-  { id:"top_cherry", name:"Cherry Tomato", category:"Toppings", serving:"100g", image:"/img/tomato.png", p:0.9, f:0.2, c:3.9, fiber:1.2 },
-  { id:"top_peas", name:"Green Peas", category:"Toppings", serving:"1/2 cup", image:"/img/peas.png", p:4, f:0.3, c:10, fiber:3.5 },
-
-  // Dressing
-  { id:"dress_olive", name:"Olive Oil", category:"Dressing", serving:"1 Tbsp", image:"/img/oliveoil.png", p:0, f:14, c:0, fiber:0 },
-  { id:"dress_tahini", name:"Tahini", category:"Dressing", serving:"1 Tbsp", image:"/img/tahini.png", p:3, f:8, c:3, fiber:1.4 },
-  { id:"dress_pb", name:"Peanut Butter", category:"Dressing", serving:"1 Tbsp", image:"/img/pb.png", p:4, f:8, c:3, fiber:1 },
+  // --- Fiber (10) ---
+  { id:"fib_broccoli", name:"Broccoli", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_broccoli.png", p:3.7, f:0.6, c:11, fiber:5.1 },
+  { id:"fib_spinach", name:"Spinach", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_spinach.png", p:5, f:0.5, c:7, fiber:4.3 },
+  { id:"fib_lentils", name:"Lentils", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_lentils.png", p:9, f:0.4, c:20, fiber:8 },
+  { id:"fib_chickpeas", name:"Chickpeas", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_chickpeas.png", p:7, f:2, c:20, fiber:6 },
+  { id:"fib_blackbeans", name:"Black Beans", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_blackbeans.png", p:7, f:0.5, c:20, fiber:8 },
+  { id:"fib_peas", name:"Green Peas", category:"Fiber", serving:"1/2 cup", image:"/src/img/fib_peas.png", p:4, f:0.3, c:10, fiber:3.5 },
+  { id:"fib_apple", name:"Apple", category:"Fiber", serving:"1 medium", image:"/src/img/fib_apple.png", p:0.5, f:0.3, c:25, fiber:4.4 },
+  { id:"fib_pear", name:"Pear", category:"Fiber", serving:"1 medium", image:"/src/img/fib_pear.png", p:1, f:0.2, c:27, fiber:5.5 },
+  { id:"fib_carrot", name:"Carrot", category:"Fiber", serving:"1 cup raw", image:"/src/img/fib_carrot.png", p:1, f:0.2, c:12, fiber:3.6 },
+  { id:"fib_cabbage", name:"Cabbage", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_cabbage.png", p:2, f:0.1, c:8, fiber:4 },
 ];
+
 
 const TARGETS = { kcal: { min: 450, max: 750 }, p: 30, f: 25, c: 70 };
 const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
@@ -138,7 +147,7 @@ export default function Builder() {
                 <li key={it.id} className="flex items-center justify-between gap-3 border rounded-xl px-3 py-2 shadow-sm">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-yellow-100 grid place-items-center">
-                      <span className="text-xl">🍚</span>
+                      <img src={it.image} alt={it.name} className="w-6 h-6" />
                     </div>
                     <div>
                       <div className="font-medium">{it.name}</div>
