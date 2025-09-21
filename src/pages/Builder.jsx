@@ -175,9 +175,23 @@ export default function Builder() {
   return (
     <div className="min-h-screen bg-[#F8EED6] text-gray-900 p-6">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-semibold text-center mb-6">
-          Base / Produce / Protein / Toppings / Dressing
-        </h1>
+        {/* Goal and Preference Display */}
+        <div className="bg-white rounded-lg shadow-md p-4 mb-6 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <span className="font-semibold text-gray-600">Daily Goal:</span>
+              <div className="text-lg font-bold text-blue-600">{dailyGoal}</div>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-600">Long-term Goal:</span>
+              <div className="text-lg font-bold text-green-600">{longTermGoal}</div>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-600">Dietary Preference:</span>
+              <div className="text-lg font-bold text-purple-600">{userDiet || "None"}</div>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* LEFT: MENU */}
@@ -225,7 +239,7 @@ export default function Builder() {
                   
                   {/* Hover details */}
                   <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-30 pointer-events-none">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
                       <div><strong>Calories:</strong> {it.calories || Math.round(it.p * 4 + it.c * 4 + it.f * 9)}</div>
                       <div><strong>Protein:</strong> {it.p}g</div>
                       <div><strong>Carbs:</strong> {it.c}g</div>
@@ -326,9 +340,9 @@ export default function Builder() {
               </div>
             </div>
 
-            <p className="text-center text-xs text-gray-600 mt-2">
+            {/* <p className="text-center text-xs text-gray-600 mt-2">
               Example message: "{totals.p >= 30 ? "Perfect for muscle growth!" : "Add more protein for muscle goals."}"
-            </p>
+            </p> */}
           </section>
         </div>
       </div>
