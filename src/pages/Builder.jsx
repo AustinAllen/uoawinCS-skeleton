@@ -4,70 +4,83 @@ const CATEGORIES = ["Carb", "Protein", "Fat", "Fiber"];
 
 const INGREDIENTS = [
   // --- Carbs (10) ---
-  { id:"carb_rice",        name:"Rice",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_rice.png",        p:4, f:0.4, c:45, fiber:0.6 },
-  { id:"carb_pasta",       name:"Pasta",             category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_pasta.png",       p:6, f:1.3, c:31, fiber:1.8 },
-  { id:"carb_bread",       name:"Whole Wheat Bread", category:"Carb", serving:"2 slices",     image: "/src/img/carb_bread.png",       p:8, f:2,   c:28, fiber:4 },
-  { id:"carb_Quinoa",      name:"Quinoa",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_Quinoa.png",      p:8, f:3.5, c:39, fiber:5 },
-  { id:"carb_potato",      name:"Potato",            category:"Carb", serving:"1 medium",     image: "/src/img/carb_potato.png",      p:3, f:0.2, c:26, fiber:2.2 },
-  { id:"carb_oats",        name:"Oats",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_oats.png",        p:6, f:3,   c:27, fiber:4 },
-  { id:"carb_corn",        name:"Corn",              category:"Carb", serving:"1 cup",        image: "/src/img/carb_corn.png",        p:5, f:2,   c:41, fiber:4.6 },
-  { id:"carb_sweetpotato", name:"Sweet Potato",      category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_SweetPotato.png", p:4, f:0.2, c:41, fiber:6 },
-  { id:"carb_couscous",    name:"Couscous",          category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_couscous.png",    p:6, f:0.3, c:36, fiber:2.2 },
-  { id:"carb_barley",      name:"Barley",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_barley.png",      p:4, f:0.4, c:44, fiber:6 },
+  { id:"carb_rice",        name:"Rice",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_rice.png",        vegan:true, dairyFree:true, nutFree:true, p:4, f:0.4, c:45, fiber:0.6 },
+  { id:"carb_pasta",       name:"Pasta",             category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_pasta.png",       vegan:false, dairyFree:true, nutFree:true,p:6, f:1.3, c:31, fiber:1.8 },
+  { id:"carb_bread",       name:"Whole Wheat Bread", category:"Carb", serving:"2 slices",     image: "/src/img/carb_bread.png",       vegan:true, dairyFree:false, nutFree:true,p:8, f:2,   c:28, fiber:4 },
+  { id:"carb_Quinoa",      name:"Quinoa",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_Quinoa.png",      vegan:true, dairyFree:true, nutFree:true,p:8, f:3.5, c:39, fiber:5 },
+  { id:"carb_potato",      name:"Potato",            category:"Carb", serving:"1 medium",     image: "/src/img/carb_potato.png",      vegan:true, dairyFree:true, nutFree:true,p:3, f:0.2, c:26, fiber:2.2 },
+  { id:"carb_oats",        name:"Oats",              category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_oats.png",        vegan:true, dairyFree:true, nutFree:true,p:6, f:3,   c:27, fiber:4 },
+  { id:"carb_corn",        name:"Corn",              category:"Carb", serving:"1 cup",        image: "/src/img/carb_corn.png",        vegan:true, dairyFree:true, nutFree:true,p:5, f:2,   c:41, fiber:4.6 },
+  { id:"carb_sweetpotato", name:"Sweet Potato",      category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_SweetPotato.png", vegan:true, dairyFree:true, nutFree:true,p:4, f:0.2, c:41, fiber:6 },
+  { id:"carb_couscous",    name:"Couscous",          category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_couscous.png",    vegan:true, dairyFree:true, nutFree:true,p:6, f:0.3, c:36, fiber:2.2 },
+  { id:"carb_barley",      name:"Barley",            category:"Carb", serving:"1 cup cooked", image: "/src/img/carb_barley.png",      vegan:true, dairyFree:true, nutFree:true,p:4, f:0.4, c:44, fiber:6 },
   // --- Protein (10) ---
-  { id:"pro_chicken-breast", name:"Chicken Breast", category:"Protein", serving:"100g cooked", image:"/src/img/pro_chicken-breast.png", p:31, f:3.6, c:0, fiber:0 },
-  { id:"pro_beef", name:"Beef", category:"Protein", serving:"100g cooked", image:"/src/img/pro_beef.png", p:26, f:20, c:0, fiber:0 },
-  { id:"pro_salmon", name:"Salmon", category:"Protein", serving:"100g cooked", image:"/src//img/pro_salmon.png", p:20, f:13, c:0, fiber:0 },
-  { id:"pro_tuna", name:"Tuna (water)", category:"Protein", serving:"100g", image:"/src/img/pro_tuna.png", p:24, f:1, c:0, fiber:0 },
-  { id:"pro_egg", name:"Egg", category:"Protein", serving:"1 large", image:"/src/img/pro_egg.png", p:6, f:5, c:0.6, fiber:0 },
-  { id:"pro_tofu", name:"Tofu", category:"Protein", serving:"100g", image:"/src/img/pro_tofu.png", p:8, f:5, c:2, fiber:1 },
-  { id:"pro_tempeh", name:"Tempeh", category:"Protein", serving:"100g", image:"/src/img/pro_tempeh.png", p:19, f:11, c:9, fiber:5 },
-  { id:"pro_shrimp", name:"Shrimp", category:"Protein", serving:"100g", image:"/src/img/pro_shrimp.png", p:24, f:0.3, c:0, fiber:0 },
-  { id:"pro_greek-yogurt", name:"Greek Yogurt", category:"Protein", serving:"1 cup", image:"/src/img/pro_greek-yogurt.png", p:10, f:0.7, c:6, fiber:0 },
-  { id:"pro_cottage-cheese", name:"Cottage Cheese", category:"Protein", serving:"1 cup", image:"/src/img/pro_cottage-cheese.png", p:25, f:2.3, c:6, fiber:0 },
+  { id:"pro_chicken-breast", name:"Chicken Breast", category:"Protein", serving:"100g cooked", image:"/src/img/pro_chicken-breast.png", vegan:false, dairyFree:true, nutFree:true,p:31, f:3.6, c:0, fiber:0 },
+  { id:"pro_beef", name:"Beef", category:"Protein", serving:"100g cooked", image:"/src/img/pro_beef.png", vegan:false, dairyFree:true, nutFree:true,p:26, f:20, c:0, fiber:0 },
+  { id:"pro_salmon", name:"Salmon", category:"Protein", serving:"100g cooked", image:"/src//img/pro_salmon.png", vegan:false, dairyFree:true, nutFree:true,p:20, f:13, c:0, fiber:0 },
+  { id:"pro_tuna", name:"Tuna (water)", category:"Protein", serving:"100g", image:"/src/img/pro_tuna.png", vegan:false, dairyFree:true, nutFree:true, p:24, f:1, c:0, fiber:0 },
+  { id:"pro_egg", name:"Egg", category:"Protein", serving:"1 large", image:"/src/img/pro_egg.png", vegan:false, dairyFree:true, nutFree:true, p:6, f:5, c:0.6, fiber:0 },
+  { id:"pro_tofu", name:"Tofu", category:"Protein", serving:"100g", image:"/src/img/pro_tofu.png", vegan:true, dairyFree:true, nutFree:true, p:8, f:5, c:2, fiber:1 },
+  { id:"pro_tempeh", name:"Tempeh", category:"Protein", serving:"100g", image:"/src/img/pro_tempeh.png", vegan:true, dairyFree:true, nutFree:true, p:19, f:11, c:9, fiber:5 },
+  { id:"pro_shrimp", name:"Shrimp", category:"Protein", serving:"100g", image:"/src/img/pro_shrimp.png", vegan:false, dairyFree:true, nutFree:true, p:24, f:0.3, c:0, fiber:0 },
+  { id:"pro_greek-yogurt", name:"Greek Yogurt", category:"Protein", serving:"1 cup", image:"/src/img/pro_greek-yogurt.png", vegan:false, dairyFree:false, nutFree:true, p:10, f:0.7, c:6, fiber:0 },
+  { id:"pro_cottage-cheese", name:"Cottage Cheese", category:"Protein", serving:"1 cup", image:"/src/img/pro_cottage-cheese.png", vegan:false, dairyFree:false, nutFree:true, p:25, f:2.3, c:6, fiber:0 },
 
   // --- Fat (10) ---
-  { id:"fat_oliveoil", name:"Olive Oil", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_oliveoil.png", p:0, f:14, c:0, fiber:0 },
-  { id:"fat_avocado", name:"Avocado", category:"Fat", serving:"1/2 medium", image:"/src/img/fat_avocado.png", p:2, f:15, c:9, fiber:7 },
-  { id:"fat_almonds", name:"Almonds", category:"Fat", serving:"28g", image:"/src/img/fat_almonds.png", p:6, f:14, c:6, fiber:3.5 },
-  { id:"fat_walnuts", name:"Walnuts", category:"Fat", serving:"28g", image:"/src/img/fat_walnuts.png", p:4, f:18, c:4, fiber:2 },
-  { id:"fat_peanutbutter", name:"Peanut Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_peanutbutter.png", p:4, f:8, c:3, fiber:1 },
-  { id:"fat_cheese", name:"Cheddar Cheese", category:"Fat", serving:"28g", image:"/src/img/fat_cheese.png", p:7, f:9, c:1, fiber:0 },
-  { id:"fat_butter", name:"Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_butter.png", p:0, f:11, c:0, fiber:0 },
-  { id:"fat_chocolate", name:"Dark Chocolate", category:"Fat", serving:"30g", image:"/src/img/fat_chocolate.png", p:2, f:12, c:13, fiber:3 },
-  { id:"fat_coconut", name:"Coconut Meat", category:"Fat", serving:"1 cup", image:"/src/img/fat_coconut.png", p:3, f:27, c:12, fiber:7 },
-  { id:"fat_flaxseed", name:"Flax Seeds", category:"Fat", serving:"2 Tbsp", image:"/src/img/fat_flaxseed.png", p:4, f:8, c:4, fiber:4 },
+  { id:"fat_oliveoil", name:"Olive Oil", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_oliveoil.png", vegan:false, dairyFree:true, nutFree:true, p:0, f:14, c:0, fiber:0 },
+  { id:"fat_avocado", name:"Avocado", category:"Fat", serving:"1/2 medium", image:"/src/img/fat_avocado.png", vegan:false, dairyFree:true, nutFree:true, p:2, f:15, c:9, fiber:7 },
+  { id:"fat_almonds", name:"Almonds", category:"Fat", serving:"28g", image:"/src/img/fat_almonds.png", vegan:false, dairyFree:true, nutFree:false, p:6, f:14, c:6, fiber:3.5 },
+  { id:"fat_walnuts", name:"Walnuts", category:"Fat", serving:"28g", image:"/src/img/fat_walnuts.png", vegan:false, dairyFree:true, nutFree:false, p:4, f:18, c:4, fiber:2 },
+  { id:"fat_peanutbutter", name:"Peanut Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_peanutbutter.png", vegan:true, dairyFree:false, nutFree:true, p:4, f:8, c:3, fiber:1 },
+  { id:"fat_cheese", name:"Cheddar Cheese", category:"Fat", serving:"28g", image:"/src/img/fat_cheese.png", vegan:false, dairyFree:false, nutFree:true, p:7, f:9, c:1, fiber:0 },
+  { id:"fat_butter", name:"Butter", category:"Fat", serving:"1 Tbsp", image:"/src/img/fat_butter.png", vegan:false, dairyFree:false, nutFree:true, p:0, f:11, c:0, fiber:0 },
+  { id:"fat_chocolate", name:"Dark Chocolate", category:"Fat", serving:"30g", image:"/src/img/fat_chocolate.png", vegan:false, dairyFree:false, nutFree:true, p:2, f:12, c:13, fiber:3 },
+  { id:"fat_coconut", name:"Coconut Meat", category:"Fat", serving:"1 cup", image:"/src/img/fat_coconut.png", vegan:true, dairyFree:true, nutFree:true, p:3, f:27, c:12, fiber:7 },
+  { id:"fat_flaxseed", name:"Flax Seeds", category:"Fat", serving:"2 Tbsp", image:"/src/img/fat_flaxseed.png", vegan:true, dairyFree:true, nutFree:true, p:4, f:8, c:4, fiber:4 },
 
   // --- Fiber (10) ---
-  { id:"fib_broccoli", name:"Broccoli", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_broccoli.png", p:3.7, f:0.6, c:11, fiber:5.1 },
-  { id:"fib_spinach", name:"Spinach", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_spinach.png", p:5, f:0.5, c:7, fiber:4.3 },
-  { id:"fib_lentils", name:"Lentils", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_lentils.png", p:9, f:0.4, c:20, fiber:8 },
-  { id:"fib_chickpeas", name:"Chickpeas", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_chickpeas.png", p:7, f:2, c:20, fiber:6 },
-  { id:"fib_blackbeans", name:"Black Beans", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_blackbeans.png", p:7, f:0.5, c:20, fiber:8 },
-  { id:"fib_peas", name:"Green Peas", category:"Fiber", serving:"1/2 cup", image:"/src/img/fib_peas.png", p:4, f:0.3, c:10, fiber:3.5 },
-  { id:"fib_apple", name:"Apple", category:"Fiber", serving:"1 medium", image:"/src/img/fib_apple.png", p:0.5, f:0.3, c:25, fiber:4.4 },
-  { id:"fib_pear", name:"Pear", category:"Fiber", serving:"1 medium", image:"/src/img/fib_pear.png", p:1, f:0.2, c:27, fiber:5.5 },
-  { id:"fib_carrot", name:"Carrot", category:"Fiber", serving:"1 cup raw", image:"/src/img/fib_carrot.png", p:1, f:0.2, c:12, fiber:3.6 },
-  { id:"fib_cabbage", name:"Cabbage", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_cabbage.png", p:2, f:0.1, c:8, fiber:4 },
+  { id:"fib_broccoli", name:"Broccoli", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_broccoli.png", vegan:true, dairyFree:true, nutFree:true, p:3.7, f:0.6, c:11, fiber:5.1 },
+  { id:"fib_spinach", name:"Spinach", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_spinach.png", vegan:true, dairyFree:true, nutFree:true, p:5, f:0.5, c:7, fiber:4.3 },
+  { id:"fib_lentils", name:"Lentils", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_lentils.png", vegan:true, dairyFree:true, nutFree:true, p:9, f:0.4, c:20, fiber:8 },
+  { id:"fib_chickpeas", name:"Chickpeas", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_chickpeas.png", vegan:true, dairyFree:true, nutFree:true, p:7, f:2, c:20, fiber:6 },
+  { id:"fib_blackbeans", name:"Black Beans", category:"Fiber", serving:"1/2 cup cooked", image:"/src/img/fib_blackbeans.png", vegan:true, dairyFree:true, nutFree:true, p:7, f:0.5, c:20, fiber:8 },
+  { id:"fib_peas", name:"Green Peas", category:"Fiber", serving:"1/2 cup", image:"/src/img/fib_peas.png", vegan:true, dairyFree:true, nutFree:true, p:4, f:0.3, c:10, fiber:3.5 },
+  { id:"fib_apple", name:"Apple", category:"Fiber", serving:"1 medium", image:"/src/img/fib_apple.png", vegan:true, dairyFree:true, nutFree:true, p:0.5, f:0.3, c:25, fiber:4.4 },
+  { id:"fib_pear", name:"Pear", category:"Fiber", serving:"1 medium", image:"/src/img/fib_pear.png", vegan:true, dairyFree:true, nutFree:true, p:1, f:0.2, c:27, fiber:5.5 },
+  { id:"fib_carrot", name:"Carrot", category:"Fiber", serving:"1 cup raw", image:"/src/img/fib_carrot.png", vegan:true, dairyFree:true, nutFree:true, p:1, f:0.2, c:12, fiber:3.6 },
+  { id:"fib_cabbage", name:"Cabbage", category:"Fiber", serving:"1 cup cooked", image:"/src/img/fib_cabbage.png", vegan:true, dairyFree:true, nutFree:true, p:2, f:0.1, c:8, fiber:4 },
 ];
 
 
 const TARGETS = { kcal: { min: 450, max: 750 }, p: 30, f: 25, c: 70 };
 const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
 
+
 export default function Builder() {
   const [tab, setTab] = useState("Base");
   const [cart, setCart] = useState({});
+  const [filters, setFilters] = useState({
+    vegan: false,
+    dairyFree: false,
+    nutFree: false,
+  });
 
   const baseCount = useMemo(
     () => Object.values(cart).filter(({ item }) => item.category === "Base").length,
     [cart]
   );
 
-  const filtered = useMemo(
-    () => INGREDIENTS.filter((i) => i.category === tab),
-    [tab]
-  );
+  const filtered = useMemo(() => {
+    return INGREDIENTS.filter((i) => {
+      if (i.category !== tab) return false;
+
+      if (filters.vegan && !i.vegan) return false;
+      if (filters.dairyFree && !i.dairyFree) return false;
+      if (filters.nutFree && !i.nutFree) return false;
+
+      return true;
+    });
+  }, [tab, filters]);
 
   const totals = useMemo(() => {
     let p = 0, f = 0, c = 0, fiber = 0;
@@ -140,7 +153,19 @@ export default function Builder() {
                 </button>
               ))}
             </div>
-
+            {/* Filters */}
+            <div className="flex flex-wrap gap-3 justify-center mb-4">
+              {["vegan", "dairyFree", "nutFree"].map((f) => (
+                <label key={f} className="flex items-center gap-1 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={filters[f]}
+                    onChange={() => setFilters((prev) => ({ ...prev, [f]: !prev[f] }))}
+                  />
+                  {f.replace(/([A-Z])/g, " $1")}
+                </label>
+              ))}
+            </div>
             {/* List */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filtered.map((it) => (
