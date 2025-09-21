@@ -1,7 +1,7 @@
 function ContactForm() {
   return (
     <section className="py-16">
-      <p className="text-2xl text-center mb-8">CONTACT FORM COMPONENT</p>
+      <p className="text-2xl text-center mb-8">Contact Us</p>
       <form className="max-w-xl mx-auto space-y-4">
         <input
           type="text"
