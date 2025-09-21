@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 const CATEGORIES = ["Carb", "Protein", "Fat", "Fiber"];
 
@@ -58,6 +58,39 @@ const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
 
 export default function Builder() {
   const [tab, setTab] = useState("Base");
+  // 개인 정보 불러오기
+  const [heightCm, setHeightCm] = useState(null);
+  const [weightKg, setWeightKg] = useState(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("health_profile_v1");
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.heightCm) setHeightCm(Number(saved.heightCm));
+      if (saved.weightKg) setWeightKg(Number(saved.weightKg));
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+function getPersonalTargets(heightCm, weightKg) {
+  // 기본값
+  let kcalMin = 450, kcalMax = 750, p = 30, f = 25, c = 70;
+  if (heightCm && weightKg) {
+    // 단순 비례식 (예시)
+    const bmi = weightKg / Math.pow(heightCm / 100, 2);
+    // 기초대사량 추정 (Mifflin-St Jeor 공식, 남성 기준)
+    const bmr = 10 * weightKg + 6.25 * heightCm - 5 * 25 + 5; // 25세 기준
+    kcalMin = Math.round(bmr * 1.1 * 0.7); // 활동량/목표에 따라 조정
+    kcalMax = Math.round(bmr * 1.1 * 1.1);
+    // 단백질, 탄수, 지방도 체중에 따라 증가
+    p = Math.round(1.2 * weightKg); // 1.2g/kg
+    f = Math.round(0.8 * weightKg); // 0.8g/kg
+    c = Math.round((kcalMax * 0.5) / 4); // 50% 탄수화물
+  }
+  return { kcal: { min: kcalMin, max: kcalMax }, p, f, c };
+}
+const kcalOf = (p, f, c) => Math.round(p * 4 + c * 4 + f * 9);
   const [cart, setCart] = useState({});
   const [filters, setFilters] = useState({
     vegan: false,
@@ -123,6 +156,7 @@ export default function Builder() {
     });
   };
 
+  const TARGETS = useMemo(() => getPersonalTargets(heightCm, weightKg), [heightCm, weightKg]);
   const kcalPos = (() => {
     const { min, max } = TARGETS.kcal;
     const clamped = Math.max(min, Math.min(totals.kcal, max));
@@ -245,9 +279,13 @@ export default function Builder() {
               <div className="text-4xl">🧮</div>
               <div className="text-sm leading-7">
                 <div>Calories: <b>{totals.kcal}</b> kcal</div>
+                <div>Calories: <b>{totals.kcal}</b> kcal (target {TARGETS.kcal.min}~{TARGETS.kcal.max})</div>
                 <div>Protein: <b>{totals.p}</b> g (target {TARGETS.p}g)</div>
                 <div>Carbs:   <b>{totals.c}</b> g (target {TARGETS.c}g)</div>
                 <div>Fat:     <b>{totals.f}</b> g (target {TARGETS.f}g)</div>
+                {(!heightCm || !weightKg) && (
+                  <div className="text-xs text-red-500 mt-1">Profile에서 키와 몸무게를 입력하면 개인 맞춤 기준이 적용됩니다.</div>
+                )}
               </div>
             </div>
 
