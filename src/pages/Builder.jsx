@@ -183,7 +183,7 @@ export default function Builder() {
                     <li key={item.id} className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-yellow-100 grid place-items-center">
-                          <span>🥕</span>
+                          <img src={item.image} alt={item.name} className="w-6 h-6" />
                         </div>
                         <div className="text-sm">
                           <div className="font-medium">{item.name}</div>
