@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "./Button";
 
 function Welcome() {
@@ -11,7 +12,9 @@ function Welcome() {
           Build salads and track your health and wellbeing!
         </p>
         <div className="mt-6">
-          <Button className="w-[10px]">Get Started!</Button>
+          <Link to="/builder">
+            <Button to="/about" className="w-[10px]">Get Started!</Button>
+          </Link>
         </div>
       </div>
     </section>
