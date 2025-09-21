@@ -18,7 +18,6 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/builder" element={<Builder />} />
       </Routes>
-
       <Footer />
     </div>
   );
